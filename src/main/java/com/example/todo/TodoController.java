@@ -1,7 +1,7 @@
 package com.example.todo;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,4 +20,9 @@ public class TodoController {
         return todoService.getAllTodos();
     }
 
+    @PostMapping("/todos")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void postTodo(@RequestParam String title) {
+        todoService.addTodo(new Todo(null, title));
+    }
 }

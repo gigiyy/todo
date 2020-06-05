@@ -11,6 +11,7 @@ import java.util.Optional;
 public class SpyTodoRepository implements TodoRepository {
     private boolean findAllIsCalled;
     private List<Todo> findAll_returnValue;
+    private Todo save_paramValue;
 
     @Override
     public List<Todo> findAll() {
@@ -60,6 +61,7 @@ public class SpyTodoRepository implements TodoRepository {
 
     @Override
     public <S extends Todo> S save(S entity) {
+        save_paramValue = entity;
         return null;
     }
 
@@ -139,5 +141,9 @@ public class SpyTodoRepository implements TodoRepository {
 
     public void setFindAll_returnValue(List<Todo> findAll_returnValue) {
         this.findAll_returnValue = findAll_returnValue;
+    }
+
+    public Todo getSave_paramValue() {
+        return save_paramValue;
     }
 }

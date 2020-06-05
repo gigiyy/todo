@@ -4,8 +4,6 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
@@ -14,10 +12,9 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-
-@ExtendWith(MockitoExtension.class)
 public class TodoControllerTests {
     SpyTodoService spyTodoService;
 
@@ -28,7 +25,7 @@ public class TodoControllerTests {
     }
 
     @Test
-    public void get_todos_returns_status_OK() {
+    public void getTodos_returns_status_OK() {
         spyTodoService.setGetAllTodos_returnAllTodos(Lists.emptyList());
         given()
                 .when()
@@ -39,7 +36,7 @@ public class TodoControllerTests {
     }
 
     @Test
-    public void get_todos_then_call_todoService_getAllTodos() {
+    public void geTodos_call_todoService_getAllTodos() {
         spyTodoService.setGetAllTodos_returnAllTodos(List.of(new Todo(1L, "dummy title")));
         given()
                 .when()
@@ -49,5 +46,18 @@ public class TodoControllerTests {
 
         assertThat(spyTodoService.getAllTodosIscalled(), is(true));
 
+    }
+
+    @Test
+    public void postTodos_returns_status_created() {
+        given()
+                .param("title", "good title")
+                .when()
+                .post("/todos")
+                .then()
+                .statusCode(CREATED.value());
+
+        Todo param = spyTodoService.getAddTodo_paramValue();
+        assertThat(param.getTitle(), is("good title"));
     }
 }
