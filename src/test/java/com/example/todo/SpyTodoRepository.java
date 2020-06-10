@@ -12,6 +12,7 @@ public class SpyTodoRepository implements TodoRepository {
     private boolean findAllIsCalled;
     private List<Todo> findAll_returnValue;
     private Todo save_paramValue;
+    private Todo findById_returnValue;
 
     @Override
     public List<Todo> findAll() {
@@ -72,7 +73,7 @@ public class SpyTodoRepository implements TodoRepository {
 
     @Override
     public Optional<Todo> findById(Long aLong) {
-        return Optional.empty();
+        return Optional.of(findById_returnValue);
     }
 
     @Override
@@ -145,5 +146,9 @@ public class SpyTodoRepository implements TodoRepository {
 
     public Todo getSave_paramValue() {
         return save_paramValue;
+    }
+
+    public void setFindById_returnValue(Todo findById_returnValue) {
+        this.findById_returnValue = findById_returnValue;
     }
 }

@@ -1,8 +1,10 @@
 package com.example.todo;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TodoService {
     List<Todo> getAllTodos();
-    void addTodo(Todo todo);
+    void updateTodo(Todo todo);
+    Optional<Todo> findTodo(Long id);
 }

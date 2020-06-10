@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,8 +32,16 @@ class TodoServiceTest {
 
     @Test
     public void addTodo_then_save() {
-        todoService.addTodo(new Todo(null, "good title"));
+        todoService.updateTodo(new Todo(null, "good title"));
         Todo saved = spyTodoRepository.getSave_paramValue();
         assertThat(saved.getTitle(), is("good title"));
+    }
+
+    @Test
+    public void findTodo_returnValue() {
+        spyTodoRepository.setFindById_returnValue(new Todo(1L, "dummy"));
+        Optional<Todo> todos = todoService.findTodo(1L);
+        assertThat(todos, equalTo(Optional.of(new Todo(1L, "dummy"))));
+
     }
 }

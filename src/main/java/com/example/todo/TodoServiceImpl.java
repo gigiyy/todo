@@ -3,6 +3,7 @@ package com.example.todo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoServiceImpl implements TodoService {
@@ -18,7 +19,12 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public void addTodo(Todo todo) {
+    public void updateTodo(Todo todo) {
         todoRepository.save(todo);
+    }
+
+    @Override
+    public Optional<Todo> findTodo(Long id) {
+        return todoRepository.findById(id);
     }
 }
