@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -21,7 +20,7 @@ public class TodoControllerTests {
     @BeforeEach
     public void setup() {
         spyTodoService = new SpyTodoService();
-        RestAssuredMockMvc.standaloneSetup(new TodoController(spyTodoService));
+        RestAssuredMockMvc.standaloneSetup(new TodoController(spyTodoService), new TodoControllerAdvice());
     }
 
     @Test
@@ -63,6 +62,7 @@ public class TodoControllerTests {
 
     @Test
     public void getTodo_return_notFound_for_notExistingItem() {
+        spyTodoService.setFindTodo_throwNotFoundException();
         given()
                 .when()
                 .get("/todos/1")
@@ -85,6 +85,7 @@ public class TodoControllerTests {
 
     @Test
     public void putTodos_returns_status_noContent() {
+        spyTodoService.setFindTodo_returnTodo(new Todo(1L, "old Title"));
         given()
                 .param("title", "good title")
                 .put("/todos/1")
@@ -93,5 +94,15 @@ public class TodoControllerTests {
 
         Todo param = spyTodoService.getUpdateTodo_paramValue();
         assertThat(param, equalTo(new Todo(1L, "good title")));
+    }
+
+    @Test
+    public void putTodo_returns_notFound_for_notExistingItem() {
+        spyTodoService.setFindTodo_throwNotFoundException();
+        given()
+                .param("title", "not there")
+                .put("/todos/1")
+                .then()
+                .statusCode(NOT_FOUND.value());
     }
 }

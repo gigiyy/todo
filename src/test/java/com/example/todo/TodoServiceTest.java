@@ -40,8 +40,8 @@ class TodoServiceTest {
     @Test
     public void findTodo_returnValue() {
         spyTodoRepository.setFindById_returnValue(new Todo(1L, "dummy"));
-        Optional<Todo> todos = todoService.findTodo(1L);
-        assertThat(todos, equalTo(Optional.of(new Todo(1L, "dummy"))));
+        Todo todo = todoService.findTodo(1L);
+        assertThat(todo, equalTo(new Todo(1L, "dummy")));
 
     }
 }

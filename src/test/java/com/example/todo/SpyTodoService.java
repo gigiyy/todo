@@ -10,7 +10,8 @@ public class SpyTodoService implements TodoService {
     private List<Todo> todos;
     private Todo updateTodo_paramValue;
     private Long findTodo_paramValue;
-    private Optional<Todo> findTodo_returnTodo = Optional.empty();
+    private Todo findTodo_returnTodo;
+    private boolean throwNotFoundException;
 
     public boolean getAllTodosIscalled() {
         return allTodosIscalled;
@@ -28,7 +29,8 @@ public class SpyTodoService implements TodoService {
     }
 
     @Override
-    public Optional<Todo> findTodo(Long id) {
+    public Todo findTodo(Long id) {
+        if (throwNotFoundException) throw new TodoNotFoundException("not found");
         findTodo_paramValue = id;
         return findTodo_returnTodo;
     }
@@ -47,6 +49,10 @@ public class SpyTodoService implements TodoService {
     }
 
     public void setFindTodo_returnTodo(Todo findTodo_returnTodo) {
-        this.findTodo_returnTodo = Optional.of(findTodo_returnTodo);
+        this.findTodo_returnTodo = findTodo_returnTodo;
+    }
+
+    public void setFindTodo_throwNotFoundException() {
+        throwNotFoundException = true;
     }
 }

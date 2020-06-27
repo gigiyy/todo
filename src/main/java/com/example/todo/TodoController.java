@@ -2,10 +2,8 @@ package com.example.todo;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class TodoController {
@@ -24,8 +22,7 @@ public class TodoController {
 
     @GetMapping("/todos/{id}")
     public Todo getTodo(@PathVariable Long id) {
-        return todoService.findTodo(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+        return todoService.findTodo(id);
     }
 
     @PostMapping("/todos")
@@ -37,6 +34,18 @@ public class TodoController {
     @PutMapping("/todos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void putTodo(@PathVariable Long id, @RequestParam String title) {
-        todoService.updateTodo(new Todo(id, title));
+        Todo current = todoService.findTodo(id);
+        current.title = title;
+        todoService.updateTodo(current);
+    }
+}
+
+@ControllerAdvice
+class TodoControllerAdvice {
+    @ResponseBody
+    @ExceptionHandler(TodoNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String todoNotFoundHandler(TodoNotFoundException e) {
+        return e.getMessage();
     }
 }
