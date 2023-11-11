@@ -1,0 +1,18 @@
+POST http://localhost:8080/todos
+Content-Type: application/json
+
+{
+"title": "test",
+"description": "description"
+}
+
+###
+POST http://localhost:8080/todos/1/complete
+Content-Type: application/json
+
+###
+GET http://localhost:8080/todos
+
+
+
+
