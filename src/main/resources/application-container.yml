@@ -3,3 +3,7 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true

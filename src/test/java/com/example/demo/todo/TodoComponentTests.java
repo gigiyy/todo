@@ -1,14 +1,15 @@
 package com.example.demo.todo;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -19,31 +20,25 @@ import reactor.core.publisher.Mono;
 public class TodoComponentTests {
 
 	@Container
+	@ServiceConnection
 	private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:11.1")
 		.withDatabaseName("integration-tests-db")
 		.withUsername("sa")
 		.withPassword("sa");
 
-	{
-		postgres.start();
-	}
 
-	@DynamicPropertySource
-	static void setProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", postgres::getJdbcUrl);
-		registry.add("spring.datasource.password", postgres::getPassword);
-		registry.add("spring.datasource.username", postgres::getUsername);
+	static {
+		postgres.start();
 	}
 
 	WebTestClient client;
 
 	@LocalServerPort
 	private int port;
-	private String url;
 
 	@BeforeEach
 	public void setUp() {
-		url = "http://localhost:" + port;
+		String url = "http://localhost:" + port;
 		client = WebTestClient.bindToServer().baseUrl(url).build();
 	}
 
@@ -64,7 +59,7 @@ public class TodoComponentTests {
 
 		client.get().uri(todoUrl).exchange().expectStatus().isOk()
 			.expectBodyList(TodoItem.class).hasSize(3)
-			.value(todoItems -> todoItems.stream().allMatch(item -> item.getStatus() == Status.Active));
+			.value(items -> assertThat(items).allMatch(item -> item.getStatus() == Status.Active));
 		// then
 		client.post().uri(todoUrl + "/1/complete")
 			.exchange()
