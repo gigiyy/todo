@@ -33,10 +33,17 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// test containers
 	testImplementation 'org.testcontainers:postgresql'
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.springframework:spring-webflux'
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+
+	// spring boot security with okta
+	implementation 'com.okta.spring:okta-spring-boot-starter:3.0.5'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 }
 
 compileJava {
