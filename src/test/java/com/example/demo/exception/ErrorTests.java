@@ -30,8 +30,8 @@ public class ErrorTests {
 			.isNotFound()
 			.expectBody()
 			.consumeWith(System.out::println)
-			.jsonPath("$.path").isEqualTo("/notfound")
-			.jsonPath("$.error").isEqualTo("Not Found")
+			.jsonPath("$.instance").isEqualTo("/notfound")
+			.jsonPath("$.title").isEqualTo("Not Found")
 			.jsonPath("$.status").isEqualTo("404");
 
 		// then
