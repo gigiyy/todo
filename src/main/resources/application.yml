@@ -11,6 +11,3 @@ okta:
     client-id: 0oadauximdO4VWG7z5d7
     client-secret: ${OKTA_CLIENT_SECRET}
     redirect-uri: /authorization-code/callback
-logging:
-  level:
-    root: debug

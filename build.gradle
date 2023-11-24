@@ -42,8 +42,6 @@ dependencies {
 
 	// spring boot security with okta
 	implementation 'com.okta.spring:okta-spring-boot-starter:3.0.5'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-
 }
 
 compileJava {
