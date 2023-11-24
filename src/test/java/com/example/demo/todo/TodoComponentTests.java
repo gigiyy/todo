@@ -21,6 +21,7 @@ public class TodoComponentTests {
 
 	@Container
 	@ServiceConnection
+	@SuppressWarnings("resource")
 	private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:11.1")
 		.withDatabaseName("integration-tests-db")
 		.withUsername("sa")
