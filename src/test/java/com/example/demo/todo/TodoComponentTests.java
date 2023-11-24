@@ -9,28 +9,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.core.publisher.Mono;
 
 @ActiveProfiles("container")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@Testcontainers
 public class TodoComponentTests {
 
 	@Container
 	@ServiceConnection
 	@SuppressWarnings("resource")
-	private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:11.1")
+	private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:14")
 		.withDatabaseName("integration-tests-db")
 		.withUsername("sa")
 		.withPassword("sa");
-
-
-	static {
-		postgres.start();
-	}
 
 	WebTestClient client;
 

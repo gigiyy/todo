@@ -39,6 +39,12 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 }
 
+compileJava {
+	options.compilerArgs += [
+		'-parameters'
+	]
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
